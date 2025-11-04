@@ -1,4 +1,4 @@
-# aserve — "Apache serve" - a temporary Apache binder
+# aserve — "Apache serve" — a temporary Apache binder shell script
 
 aserve is a small helper (bash shell script) that temporarily bind-mounts a local folder into Apache's document root (/var/www/html), adds minimal ACLs so Apache's www-data user can read/traverse the files, reloads Apache, and cleans everything up when you stop it. It's intended as a quick way to "point and serve" a folder for a few seconds without editing vhosts.
 
