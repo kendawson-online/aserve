@@ -1,12 +1,13 @@
-# aserve — temporary Apache binder
+# aserve — "Apache serve" - a temporary Apache binder
 
-aserve is a small helper script that temporarily bind-mounts a local folder into Apache's document root (/var/www/html), adds minimal ACLs so Apache's www-data user can read/traverse the files, reloads Apache, and cleans everything up when you stop it. It's intended as a quick way to "point and serve" a folder for a few minutes (similar to Uniform Server's quick-serve behavior) without editing vhosts.
+aserve is a small helper (bash shell script) that temporarily bind-mounts a local folder into Apache's document root (/var/www/html), adds minimal ACLs so Apache's www-data user can read/traverse the files, reloads Apache, and cleans everything up when you stop it. It's intended as a quick way to "point and serve" a folder for a few seconds without editing vhosts.
 
 This repository contains:
-- `aserve` (the script) — the script you run (you may have named it `aserve.sh` locally).
+- `aserve.sh` — the script you run on your Debian Linux machine
+- README.md - this file
 
 Prerequisites
-- Debian-based system (tested on LMDE/Cinnamon, should work on Debian/Ubuntu derivatives).
+- Debian-based system (tested on LMDE 6 (faye), but should work on Debian/Ubuntu derivatives).
 - Apache2 installed and configured to serve `/var/www/html`.
 - `acl` package recommended (for setfacl): `sudo apt install acl`
 - `mount` and `setfacl` require root. `aserve` must be run with `sudo` for normal operation.
@@ -140,12 +141,6 @@ Future ideas
   - A small systemd user unit template for persistent serving (if desired).
 
 License
-- You can add a license of your choice. Example: MIT (add a LICENSE file if you want to publish).
+- MIT 
 
-Contact / Future work
-- If you later want, I can:
-  - implement the `--clean` flag (including a safe state-file approach and interactive cleaning),
-  - add `--stop`/`--cleanup` modes that accept an alias,
-  - or build the simple Zenity GUI wrapper as a starting point.
-
-Enjoy — this is intended as a quick developer convenience to preview sites using a real Apache server without creating persistent vhosts.
+Enjoy — this is intended as a quick developer convenience to preview sites using a real Apache server without creating persistent vhosts and should only be used on development boxes. Not intended for production use. Ever.
