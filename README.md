@@ -29,7 +29,7 @@ Installation (one-time)
    ```
 2. Install into your PATH so you can call it from anywhere (example installs to `/usr/local/bin`):
    ```bash
-   sudo cp /path/to/aserve /usr/local/bin/aserve
+   sudo cp /path/to/aserve.sh /usr/local/bin/aserve
    sudo chmod 755 /usr/local/bin/aserve
    ```
 3. Verify:
