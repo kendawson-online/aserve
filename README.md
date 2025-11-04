@@ -8,7 +8,7 @@ This repository contains:
 - LICENSE - the MIT license
 
 Prerequisites
-- Debian-based system (tested on LMDE 6 (faye), but should work on Debian/Ubuntu derivatives).
+- Debian-based system (tested on LMDE 6 but should work on most Debian/Ubuntu derivatives).
 - Apache2 installed and configured to serve `/var/www/html`.
 - `acl` package recommended (for setfacl): `sudo apt install acl`
 - `mount` and `setfacl` require root. `aserve` must be run with `sudo` for normal operation.
