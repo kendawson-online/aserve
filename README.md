@@ -25,7 +25,7 @@ Quick summary of behavior
 Installation (one-time)
 1. Make the script executable (if needed):
    ```bash
-   chmod +x /path/to/aserve
+   chmod +x /path/to/aserve.sh
    ```
 2. Install into your PATH so you can call it from anywhere (example installs to `/usr/local/bin`):
    ```bash
