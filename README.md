@@ -5,6 +5,7 @@ aserve is a small helper (bash shell script) that temporarily bind-mounts a loca
 This repository contains:
 - `aserve.sh` — the script you run on your Debian Linux machine
 - README.md - this file
+- LICENSE - the MIT license
 
 Prerequisites
 - Debian-based system (tested on LMDE 6 (faye), but should work on Debian/Ubuntu derivatives).
