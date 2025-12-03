@@ -2,7 +2,7 @@
 
 **Version 1.0.4**
 
-aserve provides an easy way to "point and serve" a folder without having to copy files to /var/www/html, set up Apache vhosts, or modify permissions. 
+aserve provides an easy way to "point and serve" a folder without having to copy files to /var/www/html, set up Apache vhosts, create symbolic links, or modify permissions. 
 
 Technically, aserve is a bash shell script that temporarily bind-mounts a local folder into Apache's document root (/var/www/html), adds minimal ACLs so Apache's www-data user can read/traverse the files, reloads Apache, and cleans everything up when you stop it. 
 
