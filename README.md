@@ -1,6 +1,6 @@
 # aserve — "Apache serve"
 
-**Version 1.0.4**
+**Version 1.0.5**
 
 aserve provides an easy way to "point and serve" a folder without having to copy files to /var/www/html, set up Apache vhosts, create symbolic links, or modify permissions. 
 

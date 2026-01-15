@@ -8,7 +8,7 @@
 # Use `--clean [alias|path]` to clean up previously created mounts.
 
 set -euo pipefail
-VERSION="1.0.4"
+VERSION="1.0.5"
 
 print_help() {
   cat <<'EOF'
@@ -170,16 +170,68 @@ get_user_env() {
   if [ -z "${ORIG_USER:-}" ]; then
     return 1
   fi
-  # iterate processes owned by the original user, prefer newer ones
-  for pid in $(pgrep -u "$ORIG_USER" 2>/dev/null); do
-    if [ -r "/proc/$pid/environ" ]; then
-      val=$(tr '\0' '\n' < /proc/$pid/environ | grep -m1 "^${key}=" | cut -d= -f2- || true)
+
+  # Prioritized long-lived session process patterns (order matters)
+  patterns=(
+    "systemd --user"
+    "dbus-daemon --session"
+    "cinnamon-session"
+    "gnome-session"
+    "xfce4-session"
+    "mate-session"
+    "plasmashell"
+    "Xorg"
+    "Xwayland"
+    "bash"   # login shell as fallback
+    "zsh"
+    "fish"
+  )
+
+  # helper to try a list of pids and extract the env key
+  try_pids() {
+    for pid in "$@"; do
+      # skip if pid equals this script
+      if [ "$pid" -eq "$$" ] 2>/dev/null; then
+        continue
+      fi
+
+      envfile="/proc/$pid/environ"
+
+      # must be readable; process may have exited
+      [ -r "$envfile" ] || continue
+
+      # Use cat so the open() happens inside cat (not the shell).
+      # Redirect cat's stderr to hide races if the process exits between the test and the open.
+      val=$(cat "$envfile" 2>/dev/null | tr '\0' '\n' | grep -m1 "^${key}=" | cut -d= -f2- || true)
       if [ -n "$val" ]; then
         printf "%s" "$val"
         return 0
       fi
+    done
+    return 1
+  }
+
+  # 1) Try processes that match well-known desktop/session names
+  for p in "${patterns[@]}"; do
+    # read matching PIDs into an array (one PID per element)
+    mapfile -t pids_array < <(pgrep -u "$ORIG_USER" -f -- "$p" 2>/dev/null || true)
+    if [ "${#pids_array[@]}" -gt 0 ]; then
+      try_pids "${pids_array[@]}" && return 0
     fi
   done
+
+  # 2) Try longest-running processes for the user (more stable than newest)
+  mapfile -t longpids < <(ps -u "$ORIG_USER" -o pid=,etimes= 2>/dev/null | awk '{print $1" "$2}' | sort -k2 -nr | awk '{print $1}')
+  if [ "${#longpids[@]}" -gt 0 ]; then
+    try_pids "${longpids[@]}" && return 0
+  fi
+
+  # 3) Last resort: newest process (may be ephemeral)
+  newest_pid=$(pgrep -u "$ORIG_USER" -n 2>/dev/null || true)
+  if [ -n "$newest_pid" ]; then
+    try_pids "$newest_pid" && return 0
+  fi
+
   return 1
 }
 
